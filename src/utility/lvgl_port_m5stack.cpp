@@ -203,7 +203,7 @@ void lvgl_port_init(M5GFX &gfx) {
     esp_timer_handle_t periodic_timer;
     ESP_ERROR_CHECK(esp_timer_create(&periodic_timer_args, &periodic_timer));
     ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, 10 * 1000));
-    xTaskCreate(lvgl_rtos_task, "lvgl_rtos_task", 4096, NULL, 1, NULL);
+    xTaskCreate(lvgl_rtos_task, "lvgl_rtos_task", 65536, NULL, 1, NULL);
 #elif !defined(ARDUINO) && (__has_include(<SDL2/SDL.h>) || __has_include(<SDL.h>))
     xGuiMutex = SDL_CreateMutex();
     SDL_AddTimer(10, lvgl_tick_timer, NULL);
