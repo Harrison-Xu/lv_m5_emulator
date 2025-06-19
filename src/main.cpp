@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "lvgl_port_m5stack.hpp"
-#include <LittleFS.h>
 
 extern void user_app(void);
 

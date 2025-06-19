@@ -1,3 +1,5 @@
+print("======== SDL2 BUILD SCRIPT TRIGGERED ========")
+
 Import("env", "projenv")
 
 for e in [ env, projenv ]:
@@ -22,5 +24,5 @@ env.AddTarget(
     group="General"
 )
 
-#print('=====================================')
-#print(env.Dump())
+print(env.Dump())
+print("======== SDL2 BUILD SCRIPT FINISHED ========")

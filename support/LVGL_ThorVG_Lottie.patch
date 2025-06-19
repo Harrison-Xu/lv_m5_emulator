@@ -1,0 +1,11 @@
+--- a/src/libs/thorvg/tvgLottieProperty.h
++++ b/src/libs/thorvg/tvgLottieProperty.h
+@@ -624,7 +624,7 @@
+             const_cast<LottieColorStop&>(other).frames = nullptr;
+         } else {
+             value = other.value;
+-            const_cast<LottieColorStop&>(other).value = {nullptr, nullptr};
++            const_cast<LottieColorStop&>(other).value = ColorStop();
+         }
+         populated = other.populated;
+         count = other.count;
