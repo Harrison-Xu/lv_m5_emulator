@@ -40,7 +40,7 @@
  * - LV_STDLIB_RTTHREAD:    RT-Thread implementation
  * - LV_STDLIB_CUSTOM:      Implement the functions externally
  */
-#define LV_USE_STDLIB_MALLOC    LV_STDLIB_BUILTIN
+#define LV_USE_STDLIB_MALLOC    LV_STDLIB_CLIB
 
 /** Possible values
  * - LV_STDLIB_BUILTIN:     LVGL's built in implementation
@@ -82,6 +82,25 @@
         #undef LV_MEM_POOL_ALLOC
     #endif
 #endif  /*LV_USE_STDLIB_MALLOC == LV_STDLIB_BUILTIN*/
+
+#if LV_USE_STDLIB_MALLOC == LV_STDLIB_CUSTOM
+#include <stddef.h>
+// #include <esp_heap_caps.h>
+// #define ?????? <stddef.h>
+#define LV_STDLIB_MALLOC_INCLUDE <esp_heap_caps.h>
+static inline void* my_psram_malloc(size_t size) {
+    return heap_caps_malloc(size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+}
+static inline void* my_psram_realloc(void* ptr, size_t size) {
+    return heap_caps_realloc(ptr, size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+}
+static inline void my_psram_free(void* ptr) {
+    heap_caps_free(ptr);
+}
+#define LV_STDLIB_MALLOC  my_psram_malloc
+#define LV_STDLIB_REALLOC my_psram_realloc
+#define LV_STDLIB_FREE    my_psram_free
+#endif  /*LV_USE_STDLIB_MALLOC == LV_STDLIB_CUSTOM*/
 
 /*====================
    HAL SETTINGS
@@ -677,7 +696,7 @@
 /** Support bidirectional text. Allows mixing Left-to-Right and Right-to-Left text.
  *  The direction will be processed according to the Unicode Bidirectional Algorithm:
  *  https://www.w3.org/International/articles/inline-bidi-markup/uba-basics */
-#define LV_USE_BIDI 0
+#define LV_USE_BIDI 1
 #if LV_USE_BIDI
     /*Set the default direction. Supported values:
     *`LV_BASE_DIR_LTR` Left-to-Right
@@ -688,7 +707,7 @@
 
 /** Enable Arabic/Persian processing
  *  In these languages characters should be replaced with another form based on their position in the text */
-#define LV_USE_ARABIC_PERSIAN_CHARS 0
+#define LV_USE_ARABIC_PERSIAN_CHARS 1
 
 /*The control character to use for signaling text recoloring*/
 #define LV_TXT_COLOR_CMD "#"
